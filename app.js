@@ -14,15 +14,17 @@ firstObservable.subscribe(data1 => {
 });
 */
 
+/*
+*/
+import { of, map, interval, take, mergeMap } from "rxjs";
 
+const root  = of('Послідовний потік');
+const tick = interval(1000).pipe(take(3));
 
-
-
-
-import { delay, mergeMap, of } from "rxjs";
-
-const source$ = of("A", "B");
-
-source$
-  .pipe(mergeMap((value) => of(`${value} - transformed`).pipe(delay(1000))))
-  .subscribe((result) => console.log(result));
+root
+    .pipe(
+        mergeMap(str => tick.pipe(map(idx => `${str} ${idx}`)))
+    )
+    .subscribe(result => {
+        console.log(result);
+    });
